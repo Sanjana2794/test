@@ -9,7 +9,7 @@ git push -u origin main
 
 
 
-name: Code Checkout Only
+name: Checkout Code
 
 on:
   push:
@@ -18,12 +18,47 @@ on:
     branches: [main]
 
 jobs:
-  checkout-code:
+  checkout:
     runs-on: ubuntu-latest
 
     steps:
-      - name: ⬇ Checkout Repository Code
+      - name: ⬇ Checkout Code
         uses: actions/checkout@v3
 
-      - name: Print directory structure
-        run: ls -R
+      - name: 📁 Show Directory Structure
+        run: ls -R || echo "⚠ Failed to list files"
+
+
+
+
+
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Upload site to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+
+      - name: 🚀 Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
